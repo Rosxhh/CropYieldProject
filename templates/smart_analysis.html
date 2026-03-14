@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Unified Header -->
+    <div class="text-center mb-12 animate-[fadeInUp_0.5s_ease-out]">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-agri-500 to-agri-700 text-white text-3xl mb-6 shadow-xl shadow-agri-200 rotation-slow">
+            <i class="fa-solid fa-microchip"></i>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-4">Integrated Smart Analysis</h2>
+        <p class="text-slate-500 text-lg max-w-2xl mx-auto">Our dual-model AI system recommends the most suitable crop and estimates your harvest volume in a single unified workflow.</p>
+    </div>
+
+    {% if error %}
+    <div class="bg-red-50 border-l-4 border-red-500 p-6 mb-12 rounded-2xl shadow-sm animate-[fadeInUp_0.3s_ease-out]">
+        <div class="flex items-center gap-4">
+            <i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl"></i>
+            <p class="text-red-700 font-bold">{{ error }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Result Dashboard (Only visible after POST) -->
+    {% if result %}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+        
+        <!-- Left Analysis Card: Crop Recommendation -->
+        <div class="lg:col-span-4 animate-[fadeInLeft_0.6s_ease-out]">
+            <div class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl border border-white p-10 h-full flex flex-col items-center text-center relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fa-solid fa-medal text-6xl"></i>
+                </div>
+                
+                <p class="text-xs font-black text-agri-600 uppercase tracking-widest mb-6">Expert Recommendation</p>
+                
+                <div class="w-24 h-24 rounded-3xl bg-agri-50 flex items-center justify-center text-agri-500 text-5xl mb-6 shadow-inner">
+                    <i class="{{ crop_details.icon|default:'fa-solid fa-leaf' }}"></i>
+                </div>
+
+                <h3 class="text-3xl font-black text-slate-800 capitalize mb-4">{{ crop }}</h3>
+                <p class="text-slate-500 text-sm leading-relaxed mb-8">{{ crop_details.description|truncatewords:25 }}</p>
+                
+                <div class="mt-auto w-full pt-6 border-t border-slate-100 flex items-center justify-center gap-4">
+                    <div class="text-left">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Growth Period</p>
+                        <p class="text-sm font-bold text-slate-700">~120 Days</p>
+                    </div>
+                    <div class="h-8 w-[1px] bg-slate-100"></div>
+                    <div class="text-left">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Suitability</p>
+                        <p class="text-sm font-bold text-emerald-600">Optimal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Analysis Card: Radar Portfolio -->
+        <div class="lg:col-span-4 animate-[fadeInUp_0.6s_ease-out]">
+            <div class="bg-slate-900 rounded-[2.5rem] shadow-2xl p-10 h-full flex flex-col relative overflow-hidden">
+                <h3 class="text-white font-bold text-xl mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-chart-radar text-agri-400 text-sm"></i> Soil Fingerprint
+                </h3>
+                
+                <div class="flex-grow flex items-center justify-center min-h-[250px]">
+                    <canvas id="smartRadar"></canvas>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mt-8">
+                    <div class="bg-white/5 rounded-2xl p-3 border border-white/10">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase">Avg Rainfall</p>
+                        <p class="text-sm font-bold text-white">{{ inputs.rainfall }}mm</p>
+                    </div>
+                    <div class="bg-white/5 rounded-2xl p-3 border border-white/10">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase">Soil pH</p>
+                        <p class="text-sm font-bold text-white">{{ inputs.ph }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Analysis Card: Yield Prediction -->
+        <div class="lg:col-span-4 animate-[fadeInRight_0.6s_ease-out]">
+            <div class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl border border-white p-10 h-full flex flex-col items-center text-center relative overflow-hidden">
+                <p class="text-xs font-black text-rose-500 uppercase tracking-widest mb-6">Production Target</p>
+                
+                <div class="w-24 h-24 rounded-3xl bg-rose-50 flex items-center justify-center text-rose-500 text-5xl mb-6 shadow-inner">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+
+                <div class="mb-4">
+                    <span class="text-6xl font-black text-slate-800 tracking-tighter">{{ yield }}</span>
+                    <span class="text-2xl font-bold text-slate-400 ml-1">Tons</span>
+                </div>
+                
+                <p class="text-slate-500 text-sm mb-8">Calculated for <span class="font-bold text-slate-700">{{ inputs.area }} Ha</span> of land.</p>
+
+                <div class="mt-auto w-full bg-slate-50 rounded-2xl p-5 border border-slate-100 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-rose-500 shadow-sm">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Efficiency Rate</p>
+                        <p class="text-lg font-black text-slate-800 leading-none">{{ yield_ph }} <span class="text-xs text-slate-400">Tons/Ha</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Unified Form Section -->
+    <div class="bg-white/70 backdrop-blur-xl rounded-[3rem] shadow-xl border border-white/60 p-8 md:p-14 animate-[fadeInUp_0.8s_ease-out]">
+        <form method="post" class="space-y-10">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <!-- Farm Info -->
+                <div class="md:col-span-4 flex items-center gap-4">
+                    <span class="w-8 h-8 rounded-full bg-agri-600 text-white flex items-center justify-center text-xs font-bold">1</span>
+                    <h3 class="text-lg font-black text-slate-800">Farm Dimensions</h3>
+                </div>
+
+                <div class="md:col-span-4 space-y-2">
+                    <label class="block text-sm font-bold text-slate-700">Total Farm Area (Hectares)</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-agri-500 transition-colors">
+                            <i class="fa-solid fa-ruler-combined"></i>
+                        </div>
+                        <input type="number" step="any" name="area" value="{{ inputs.area|default:1.0 }}" required
+                            class="pl-12 w-full rounded-3xl border-2 border-slate-100 bg-slate-50/50 py-4 px-6 text-slate-800 focus:bg-white focus:border-agri-500 focus:ring-8 focus:ring-agri-500/5 transition-all outline-none font-bold" placeholder="e.g. 5.2">
+                    </div>
+                </div>
+
+                <!-- Soil Nutrients -->
+                <div class="md:col-span-4 flex items-center gap-4 mt-4">
+                    <span class="w-8 h-8 rounded-full bg-agri-600 text-white flex items-center justify-center text-xs font-bold">2</span>
+                    <h3 class="text-lg font-black text-slate-800">Soil Nutrients</h3>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Nitrogen (N)</label>
+                    <input type="number" step="any" name="nitrogen" value="{{ inputs.nitrogen|default:'' }}" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50/50 py-3.5 px-5 text-slate-800 focus:border-agri-500 transition-all outline-none" placeholder="e.g. 90">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Phosphorus (P)</label>
+                    <input type="number" step="any" name="phosphorus" value="{{ inputs.phosphorus|default:'' }}" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50/50 py-3.5 px-5 text-slate-800 focus:border-agri-500 transition-all outline-none" placeholder="e.g. 50">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Potassium (K)</label>
+                    <input type="number" step="any" name="potassium" value="{{ inputs.potassium|default:'' }}" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50/50 py-3.5 px-5 text-slate-800 focus:border-agri-500 transition-all outline-none" placeholder="e.g. 40">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Soil pH</label>
+                    <input type="number" step="any" name="ph" value="{{ inputs.ph|default:'' }}" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50/50 py-3.5 px-5 text-slate-800 focus:border-agri-500 transition-all outline-none" placeholder="e.g. 6.5">
+                </div>
+
+                <!-- Climate Factors -->
+                <div class="md:col-span-4 flex items-center gap-4 mt-4">
+                    <span class="w-8 h-8 rounded-full bg-agri-600 text-white flex items-center justify-center text-xs font-bold">3</span>
+                    <h3 class="text-lg font-black text-slate-800">Climate Factors</h3>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Temperature (°C)</label>
+                    <input type="number" step="any" name="temperature" value="{{ inputs.temperature|default:'' }}" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50/50 py-3.5 px-5 text-slate-800 focus:border-agri-500 transition-all outline-none" placeholder="e.g. 25.5">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Humidity (%)</label>
+                    <input type="number" step="any" name="humidity" value="{{ inputs.humidity|default:'' }}" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50/50 py-3.5 px-5 text-slate-800 focus:border-agri-500 transition-all outline-none" placeholder="e.g. 80">
+                </div>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Annual Rainfall (mm)</label>
+                    <input type="number" step="any" name="rainfall" value="{{ inputs.rainfall|default:'' }}" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50/50 py-3.5 px-5 text-slate-800 focus:border-agri-500 transition-all outline-none" placeholder="e.g. 200.5">
+                </div>
+            </div>
+
+            <div class="pt-8">
+                <button type="submit" class="w-full flex justify-center items-center py-6 px-10 rounded-3xl shadow-xl text-2xl font-black text-white bg-gradient-to-r from-agri-500 via-emerald-600 to-agri-600 hover:from-agri-600 hover:to-agri-700 focus:outline-none focus:ring-8 focus:ring-agri-500/10 transform hover:-translate-y-2 transition-all duration-500 group">
+                    Start AI Smart Analysis <i class="fa-solid fa-arrow-right ml-4 group-hover:translate-x-2 transition-transform"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if result %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('smartRadar').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Nitrogen', 'Phosphorus', 'Potassium', 'pH Balance', 'Humidity'],
+                datasets: [{
+                    label: 'Soil Fingerprint',
+                    data: [{{ inputs.nitrogen }}, {{ inputs.phosphorus }}, {{ inputs.potassium }}, (7 - Math.abs(7 - {{ inputs.ph }})) * 14, {{ inputs.humidity }}],
+                    backgroundColor: 'rgba(34, 197, 94, 0.4)',
+                    borderColor: '#22c55e',
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.05)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        pointLabels: { color: 'rgba(255, 255, 255, 0.5)', font: { size: 10, weight: 'bold' } },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    });
+</script>
+{% endif %}
+
+<style>
+    .rotation-slow { animation: rotation 20s infinite linear; }
+    @keyframes rotation { from { transform: rotate(0deg); } to { transform: rotate(359deg); } }
+    @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes fadeInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+</style>
+{% endblock %}

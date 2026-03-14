@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Agriculture System</title>
+    
+    <!-- PWA Setup -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#22c55e">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1892/1892742.png">
+    
+    <!-- Tailwind CSS (CDN for rapid styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts (Outfit for modern look) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for beautiful icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        agri: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #16a34a; }
+    </style>
+</head>
+
+<body class="text-slate-800 antialiased min-h-screen flex flex-col pt-20">
+
+    <!-- Premium Glassmorphism Navbar -->
+    <nav class="glass-nav fixed w-full top-0 z-50 transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-agri-500 to-agri-700 flex items-center justify-center text-white shadow-lg">
+                        <i class="fa-solid fa-leaf text-xl"></i>
+                    </div>
+                    <a href="/" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-agri-600 to-agri-900 tracking-tight">AgriCore <span class="text-sm font-medium text-slate-500 ml-1">AI</span></a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-1 items-center">
+                    <a href="/analysis/" class="px-4 py-2 rounded-full text-agri-600 bg-agri-50 font-bold border border-agri-100 shadow-sm"><i class="fa-solid fa-microchip mr-2 opacity-70 animate-pulse"></i>Smart Analysis</a>
+                    <a href="/soil/" class="px-4 py-2 rounded-full text-slate-600 hover:text-agri-600 hover:bg-agri-50 transition-all font-medium"><i class="fa-solid fa-layer-group mr-2 opacity-70"></i>Analysis</a>
+                    <a href="/weather/" class="px-4 py-2 rounded-full text-slate-600 hover:text-agri-600 hover:bg-agri-50 transition-all font-medium"><i class="fa-solid fa-cloud-sun-rain mr-2 opacity-70"></i>Weather</a>
+                    <a href="/chatbot/" class="ml-2 px-5 py-2.5 rounded-full bg-agri-600 text-white font-medium hover:bg-agri-700 shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-robot"></i> AI Assistant
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-slate-600 hover:text-agri-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="flex-grow flex flex-col relative w-full overflow-hidden">
+        <!-- Abstract background blobs -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-agri-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float -z-10" style="transform: translate(-30%, -30%);"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float -z-10" style="animation-delay: 2s; transform: translate(30%, 30%);"></div>
+        
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-20 py-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-500 font-medium">Empowering Farmers with Artificial Intelligence</p>
+            <p class="text-slate-400 text-sm mt-2">&copy; 2026 AgriCore AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('PWA ServiceWorker registered with scope:', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('PWA ServiceWorker registration failed:', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative w-full">
+    
+    <!-- Hero Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div class="text-center max-w-3xl mx-auto animate-[fadeInUp_0.8s_ease-out]">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 mt-10">
+                Grow Smarter with <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-agri-500 to-agri-800 pb-4 inline-block">AI Agriculture</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
+                Empowering farmers with machine learning. Get precise crop yield predictions, soil analysis, smart recommendations, and real-time weather forecasts.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/recommend/" class="px-8 py-4 rounded-full bg-agri-600 text-white font-semibold text-lg hover:bg-agri-700 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                    Get Recommendations
+                </a>
+                <a href="/yield/" class="px-8 py-4 rounded-full bg-white text-agri-700 border border-agri-200 font-semibold text-lg hover:bg-agri-50 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1">
+                    Predict Yield
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <!-- Yield Card -->
+            <a href="/yield/" class="group bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover-lift relative overflow-hidden text-center sm:text-left flex flex-col items-center sm:items-start h-full">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-agri-50 rounded-full group-hover:scale-150 transition-transform duration-500 -z-10"></div>
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-agri-600 text-white flex items-center justify-center text-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-agri-600 transition-colors">Yield Prediction</h3>
+                <p class="text-slate-500 font-medium mb-4 flex-grow">Advanced ML models forecast your crop production based on area, rainfall, and climate data.</p>
+                <span class="text-agri-600 font-semibold inline-flex items-center group-hover:translate-x-2 transition-transform">Explore <i class="fa-solid fa-arrow-right ml-2 text-sm"></i></span>
+            </a>
+
+            <!-- Recommend Card -->
+            <a href="/recommend/" class="group bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover-lift relative overflow-hidden text-center sm:text-left flex flex-col items-center sm:items-start h-full">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-agri-50 rounded-full group-hover:scale-150 transition-transform duration-500 -z-10"></div>
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center text-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-agri-600 transition-colors">Crop Recommendation</h3>
+                <p class="text-slate-500 font-medium mb-4 flex-grow">Input your soil nutrients and let our AI suggest the most profitable crop to plant.</p>
+                <span class="text-emerald-600 font-semibold inline-flex items-center group-hover:translate-x-2 transition-transform">Explore <i class="fa-solid fa-arrow-right ml-2 text-sm"></i></span>
+            </a>
+
+            <!-- Soil Card -->
+            <a href="/soil/" class="group bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover-lift relative overflow-hidden text-center sm:text-left flex flex-col items-center sm:items-start h-full">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-50 rounded-full group-hover:scale-150 transition-transform duration-500 -z-10"></div>
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-amber-600 transition-colors">Soil Classification</h3>
+                <p class="text-slate-500 font-medium mb-4 flex-grow">Upload a photo of your soil. Our computer vision model identifies the soil type instantly.</p>
+                <span class="text-amber-600 font-semibold inline-flex items-center group-hover:translate-x-2 transition-transform">Explore <i class="fa-solid fa-arrow-right ml-2 text-sm"></i></span>
+            </a>
+
+            <!-- Weather Card -->
+            <a href="/weather/" class="group bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover-lift relative overflow-hidden text-center sm:text-left flex flex-col items-center sm:items-start h-full">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-50 rounded-full group-hover:scale-150 transition-transform duration-500 -z-10"></div>
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 text-white flex items-center justify-center text-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-cloud-sun-rain"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">Smart Weather</h3>
+                <p class="text-slate-500 font-medium mb-4 flex-grow">Hyper-local climate conditions and real-time alerts tailored for farming practices.</p>
+                <span class="text-blue-600 font-semibold inline-flex items-center group-hover:translate-x-2 transition-transform">Explore <i class="fa-solid fa-arrow-right ml-2 text-sm"></i></span>
+            </a>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
